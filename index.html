@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+
+    <!-- PWA: 테마 색상 -->
+    <meta name="theme-color" content="#7C3AED" />
+
+    <!-- PWA: 홈 화면 설치 (Android / Chrome) -->
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- PWA: 홈 화면 설치 (iOS / Safari) -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="뮤직 사파리" />
+
+    <!-- PWA: 웹 앱 매니페스트 -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- 터치 아이콘 (iOS) -->
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+
+    <!-- Google Fonts: Nunito (귀여운 둥근 폰트) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>동물 뮤직 사파리 🦁🎵</title>
+  </head>
+  <body class="overflow-hidden bg-purple-900">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── 기본 리셋 ──────────────────────────────────── */
+*,
+*::before,
+*::after {
+  /* 터치 하이라이트(파란 사각형) 제거 */
+  -webkit-tap-highlight-color: transparent;
+  /* 길게 눌러도 팝업 안 나오게 */
+  -webkit-touch-callout: none;
+  /* 텍스트 드래그 선택 방지 (게임 플레이 중 실수 방지) */
+  user-select: none;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* 더블탭 확대 방지 */
+  touch-action: manipulation;
+}
+
+body {
+  font-family: 'Nunito', 'Comic Neue', cursive;
+  background-color: #4c1d95;
+}
+
+/* ─── 별 잡기 게임: 카운트다운 링 애니메이션 ─────── */
+@keyframes countdown {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 295;
+  }
+}
+
+.countdown-ring {
+  animation: countdown var(--lifetime, 1500ms) linear forwards;
+}
+
+/* ─── 파스텔 배경 그라디언트 유틸 ───────────────── */
+.safari-bg {
+  background: linear-gradient(135deg, #fff3e0 0%, #e8f5e9 50%, #ede7f6 100%);
+}
+
+.night-bg {
+  background: radial-gradient(ellipse at top, #1a0533 0%, #0d1b4f 60%, #050a1a 100%);
+}
