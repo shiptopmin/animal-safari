@@ -145,7 +145,7 @@ export default function App() {
 
   /* ─── StarGame 점수 변경 콜백 ───────────────────── */
   const handleStarCaught = useCallback((score) => {
-    const milestones = [5, 10, 15, 20];
+    const milestones = [15, 30, 60, 100];
     if (!milestones.includes(score)) return;
 
     const a = randomAnimal();
@@ -276,6 +276,7 @@ export default function App() {
             >
               <StarGame
                 childName={childName}
+                soundMode={soundMode}
                 onStarCaught={handleStarCaught}
               />
             </motion.div>
