@@ -242,20 +242,44 @@ function playXylophone(animalId) {
   });
 }
 
+/* ─── 한국어 동물 의성어 (TTS용) ──────────────────── */
+const ANIMAL_KR_SOUND = {
+  lion:     '어흥!',
+  monkey:   '끼끼끼!',
+  elephant: '뿌우우!',
+  frog:     '개굴개굴!',
+  duck:     '꽥꽥!',
+  chick:    '삐약삐약!',
+  tiger:    '으르렁!',
+  bear:     '그르렁!',
+  cow:      '음매!',
+  pig:      '꿀꿀!',
+  cat:      '야옹!',
+  dog:      '멍멍!',
+};
+
 /* ─── 공개 API ───────────────────────────────────── */
 
 /**
  * 동물 소리 재생
- * @param {string} animalId
- * @param {0|1|2} mode - 0=동물소리, 1=피아노, 2=실로폰
- *
- * TODO: 실제 MP3로 교체 시:
- * const paths = ['animal','piano','xylophone'];
- * return new Audio(`/sounds/${animalId}-${paths[mode]}.mp3`).play().catch(console.warn);
+ * mode 0: 한국어 TTS 의성어 (야옹, 멍멍, 꿀꿀 등)
+ * mode 1: 피아노 합성
+ * mode 2: 실로폰 합성
  */
 export function playAnimalSound(animalId, mode = 0) {
   if (mode === 1) return playPiano(animalId);
   if (mode === 2) return playXylophone(animalId);
+
+  const word = ANIMAL_KR_SOUND[animalId];
+  if (word && 'speechSynthesis' in window) {
+    const utt = new SpeechSynthesisUtterance(word);
+    utt.lang = 'ko-KR';
+    utt.rate = 1.35;
+    utt.pitch = 1.75;
+    utt.volume = 1.0;
+    window.speechSynthesis.speak(utt);
+    return;
+  }
   ANIMAL_SYNTH[animalId]?.(getCtx());
 }
 
@@ -346,19 +370,19 @@ export function playBeatSound() {
   osc.start(t); osc.stop(t + 0.31);
 }
 
-/** 점수에 맞는 한국어 숫자 음성 */
+/** 점수에 맞는 올라가는 음계 효과음 (TTS 충돌 방지용 Web Audio) */
 export function playCountSound(count) {
-  const words = ['하나','둘','셋','넷','다섯','여섯','일곱','여덟','아홉','열',
-    '열하나','열둘','열셋','열넷','열다섯','열여섯','열일곱','열여덟','열아홉','스물'];
-  if ('speechSynthesis' in window) {
-    const word = words[(count - 1) % words.length] ?? '우와';
-    const utt = new SpeechSynthesisUtterance(`${word}!`);
-    utt.lang = 'ko-KR'; utt.rate = 1.25; utt.pitch = 1.6;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utt);
-  } else {
-    playPopSound();
-  }
+  const ctx = getCtx(), t = ctx.currentTime;
+  const freq = 400 + ((count - 1) % 12) * 60;
+  [0, 0.07].forEach((offset, i) => {
+    const osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq * (i === 0 ? 1 : 1.25);
+    gain.gain.setValueAtTime(0.45, t + offset);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + offset + 0.13);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(t + offset); osc.stop(t + offset + 0.14);
+  });
 }
 
 /** 칭찬 TTS */
